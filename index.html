@@ -1,11 +1,74 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>IIT Ready</title>
-  </head>
-  <body>
-    <div>
-        We will teach you how to prepare for IIT-JEE.
-    </div>
-  </body>
+<html lang="en" >
+	<head>
+		<meta charset="UTF-8">
+		<title>IIT Ready - Get Ready for IIT-JEE</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" description="Get best resource to Prepare for IIT-JEE">
+		<style type="text/css">
+			@import url("https://fonts.googleapis.com/css?family=Bitter:400,500,700&display=swap");
+			body {
+				font-family: "Bitter";
+				margin:0;
+				--color-primary: #3cda84;
+				--color-text: #161616;
+			}
+			.logo-container{
+				text-align:center;
+				margin: 20px;
+			}
+			.logo {
+				background-color: var(--color-primary);
+				display: inline-flex;
+				padding: 6px;
+				font-size: 30px;
+				color: var(--color-text);
+				border-radius: 6px;
+			}
+			.logo .ready {
+				background: white;
+				color: var(--color-text);
+				padding: 6px 12px;
+				border-radius: 6px;
+			}
+			.logo .iit {
+				color: var(--color-text);
+				padding: 6px 12px;
+			}
+			a{
+				color: inherit;
+				text-decoration: none;
+				position: relative;
+			}
+			a:hover:after{
+				height: 100%;
+			}
+			a:after{
+				position: absolute;
+				background: var(--color-primary);
+				opacity: 0.5;
+				height: 20%;
+				left: -.1rem;
+				right: -.1rem;
+				bottom: 0;
+				content: " ";
+				transition: height ease 100ms;
+			}
+			.links{
+				text-align: center;
+				font-size: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="logo-container">
+			<div class="logo">
+				<span class="iit">IIT</span>
+				<span class="ready">Ready</span>
+			</div>
+		</div>
+		<div class="links">
+			Visit <a class="link" href="https://www.prepleaf.com">Prepleaf.com</a> for more information.
+		</div>
+	</body>
 </html>
