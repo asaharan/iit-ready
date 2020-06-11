@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+            <style>
+                body{
+                    margin: 0;
+                }
+                *,*:after, *:before{
+                    box-sizing: border-box;
+                    font-family: Nunito;
+                }
+                .container{
+                    max-width: 600px;
+                    margin: auto;
+                    margin-top: 16px;
+                    margin-bottom: 16px;
+                }
+                .text{
+                    font-size: 24px;
+                    text-align: center;
+                }
+                .button-list{
+                    display: flex;
+                    justify-content: center;
+                }
+                .button{
+                    margin: 8px;
+                    font-size: 16px;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    min-width: 120px;
+                    cursor: pointer;
+                    text-transform: uppercase;
+                }
+                .button.primary{
+                    background-color: rebeccapurple;
+                    color: white;
+                    border: none;
+                }
+                .button.secondary{
+                    color: rebeccapurple;
+                    background-color: white;
+                    border: solid 1px;
+                }
+                .answer-input{
+                    width: 100%;
+                    height: 36px;
+                    border: solid 1px #b0b0b0;
+                    border-radius: 3px;
+                    margin: 0;
+                    padding: 0 8px;
+                }
+                .answer-input-container{
+                    display: flex;
+                    margin: 16px 8px 8px;
+                }
+                .scoreboard{
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 16px;
+                }
+                .score-numbers{
+                    display: flex;
+                }
+                .scoreboard .item{
+                    width: 33.3333%;
+                    text-align: center;
+                    text-transform: uppercase;
+                }
+                .scoreboard .item :last-child{
+                    margin-top: 2px;
+                    margin-bottom: 8px;
+                }
+                
+                .button.danger{
+                    color: red;
+                    background-color: white;
+                    border: solid 1px;
+                }
+                .button.full{
+                    width: 100%;
+                }
+                .reset-button-container{
+                    display: flex;
+                    margin-top: 8rem;
+                }
+                .score-graph{
+                    display: flex;
+                }
+                .score-graph .line{
+                    height: 8px;
+                    flex-grow: 1;
+                }
+                .score-graph-correct-line{
+                    background-color: rgb(96, 187, 105);
+                }
+                .score-graph-incorrect-line{
+                    background-color: #DE3700;
+                }
+                .answer-message{
+                    text-align: center;
+                    font-size: 20px;
+                }
+                .correct-answer-message{
+                    color: rgb(96,187,105);
+                }
+                .incorrect-answer-message{
+                    color: #DE3700;
+                }
+                .answer{
+                    text-align: center;
+                    font-size: 18px;
+                }
+                .answer-container{
+                    margin-top: 8px;
+                }k
+            </style>
+        </head>
+    <body>
+        <div class='container'>
+            <div class='scoreboard'>
+                <div class='score-numbers'>
+                    <div class='item'>
+                        <div>Total</div>
+                        <div id='total-score'></div>
+                    </div>
+                    <div class='item'>
+                        <div>Correct</div>
+                        <div id='correct-score'></div>
+                    </div>
+                    <div class='item'>
+                        <div>Incorrect</div>
+                        <div id='incorrect-score'></div>
+                    </div>
+                </div>
+                <div class='score-graph'>
+                    <div id='correct-graph-line' class='score-graph-correct-line line'></div>
+                    <div id='incorrect-graph-line' class='score-graph-incorrect-line line'></div>
+                </div>
+            </div>
+            <div class='text'>
+                <span id='first'></span>
+                <span id='operation'></span>
+                <span id='second'></span>
+            </div>
+            <div class='answer-input-container'>
+                <input class='answer-input' type='number' id='answer-input'/>
+            </div>
+            <div class='button-list'>
+                <button class='button primary'onclick='change()'>Change</button>
+                <button class='button secondary' onclick='showAnswer()'>Show answer</button>
+            </div>
+            <div class='answer-container'>
+                <div id='answer' class='answer'></div>
+            </div>
+            <div class='answer-message incorrect-answer-message' id='incorrect-answer-message'>
+                Your answer is wrong
+            </div>
+            <div class='answer-message correct-answer-message' id='correct-answer-message'>
+                Your answer is correct
+            </div>
+            <div class='reset-button-container'>
+                <button class='button danger full' onclick='reset()'>Reset</button>
+            </div>
+        </div>
+
+        <script>
+            var storageCorrectKey = 'multiply-correct'
+            var storageIncorrectKey = 'multiply-incorrect'
+            function getFromStorage(key){
+                var correct = parseInt(window.localStorage[key],10)
+                if(isNaN(correct)){correct=0}
+                return correct;
+            }
+            function reset(){
+                window.localStorage[storageIncorrectKey] = ''
+                window.localStorage[storageCorrectKey]=''
+                updateTotal()
+            }
+            function getTotal(){
+                var correct = getFromStorage(storageCorrectKey)
+                var incorrect = getFromStorage(storageIncorrectKey)
+                return {correct, incorrect, total: correct+incorrect}
+                
+            }
+            function updateTotal(isCorrect){
+                if(isCorrect){
+                    window.localStorage[storageCorrectKey] = getTotal().correct + 1;
+                }else if(isCorrect===false){
+                    window.localStorage[storageIncorrectKey] = getTotal().incorrect + 1;
+                }
+                var scores = getTotal()
+                var totalEl = document.getElementById('total-score')
+                var correctEl = document.getElementById('correct-score')
+                var incorrectEl = document.getElementById('incorrect-score')
+                var correctGraphEl = document.getElementById('correct-graph-line')
+                var incorrectGraphEl = document.getElementById('incorrect-graph-line')
+                correctEl.innerText = scores.correct;
+                incorrectEl.innerText = scores.incorrect;
+                totalEl.innerText = scores.total
+                correctGraphEl.style['flex-grow'] = scores.correct;
+                incorrectGraphEl.style['flex-grow'] = scores.incorrect;
+            }
+            function getRandomNumber(start, end){
+                var r = Math.random()
+                return Math.ceil(start + (end-start)*r)
+            }
+            function showAnswer() {
+                var answerEl = document.getElementById('answer')
+                var answerInput = document.getElementById('answer-input')
+                var correctAnswerMessageEl = document.getElementById('correct-answer-message')
+                var incorrectAnswerMessageEl = document.getElementById('incorrect-answer-message')
+                answerEl.style.display = 'block'
+                var correctAnswer = parseInt(answerEl.innerText,10)
+                var usersAnswer = parseInt(answerInput.value,10)
+                var isCorrect = usersAnswer === correctAnswer
+                updateTotal(isCorrect)
+                if(isCorrect){
+                    correctAnswerMessageEl.style.display = ''
+                }else{
+                    incorrectAnswerMessageEl.style.display = ''
+                }
+            }
+            function change(){
+                updateTotal()
+                var firstEl = document.getElementById('first')
+                var secondEl = document.getElementById('second')
+                var operationEl = document.getElementById('operation')
+                var answerEl = document.getElementById('answer')
+                var correctAnswerMessageEl = document.getElementById('correct-answer-message')
+                var incorrectAnswerMessageEl = document.getElementById('incorrect-answer-message')
+                var answerInputEl = document.getElementById('answer-input')
+                answerInputEl.value = ''
+                answerEl.style.display = 'none'
+                correctAnswerMessageEl.style.display = 'none'
+                incorrectAnswerMessageEl.style.display = 'none'
+
+                var firstNumber = getRandomNumber(0,500)
+                var secondNumber = getRandomNumber(28,70)
+                var symbolNumber = getRandomNumber(0,10)
+                var operator = symbolNumber%2 ===0 ? '+' : '-';
+                firstEl.innerText = firstNumber
+                secondEl.innerText = secondNumber
+                operationEl.innerText = operator
+                answerEl.innerText = eval(firstNumber+operator+secondNumber)
+                answerInputEl.focus()
+            }
+            window.onload = change
+        </script>
+    </body>
+</html>
